@@ -10,21 +10,67 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include"BitcoinExchange.hpp"
+
+std::map<int, std::string> splitString(const std::string& str, const std::string& delimiter) {
+    std::map<int, std::string> substrings;
+    std::string::size_type pos = 0;
+    int index = 0;
+    std::string s = str;
+    while ((pos = s.find(delimiter)) != std::string::npos) {
+        substrings[index++] = s.substr(0, pos);
+        s.erase(0, pos + delimiter.length());
+    }
+    substrings[index] = s;
+    return substrings;
+}
+
+bool    check(std::string buff)
+{
+    std::string delimiter = " ";
+    int         j = 0;
+
+    if (!buff[0])
+        return (false);
+    std::map<int, std::string> sub_str = splitString(buff, delimiter);
+
+     for (std::map<int, std::string>::iterator it = sub_str.begin(); it != sub_str.end(); ++it) {
+        j++;
+        std::string sub_str = it->second;
+        for (size_t i = 0; i < sub_str.length(); ++i) {
+            if (!(isdigit(it->second[i]) || it->second[i] == '-' || it->second[i] == '|' || it->second[i] == '.' || it->second[i] == ',')) {
+                std::cout << RED << errorBadInput << buff << NONE << std::endl;
+                return (false);
+        }
+        }
+     }
+    if (j > 3)
+    {
+        std::cout << RED << errorBadInput << buff << NONE << std::endl;
+        return (false); 
+    }
+    return (true);
+}
 
 BitcoinExchange::BitcoinExchange(char *fichierTxt) : _fichierTxt(fichierTxt)
 {
     monFlux.open(FICHIER_CSV);
     if (!monFlux)
-        throw errorOpen;
-    
+    {
+        std::cout << RED errorOpen << "\"" << FICHIER_CSV  << "\"" NONE << std::endl;
+        exit(1);
+    }
     getline(monFlux, buffer);
+    if (!buffer[0])
+
+        exit(1);
     parsing = buffer.rfind("exchange");
     buffer.erase(parsing);
     parsingCsv = buffer.substr(4);
     while (getline(monFlux, buffer))
     {
+        if (!check(buffer))
+            continue;
         size_t  i = buffer.find("\r");
         if (i != std::string::npos)
             buffer.erase(i);
@@ -48,42 +94,7 @@ BitcoinExchange::~BitcoinExchange()
 {
 }
 
-std::map<int, std::string> splitString(const std::string& str, const std::string& delimiter) {
-    std::map<int, std::string> substrings;
-    std::string::size_type pos = 0;
-    int index = 0;
-    std::string s = str;
-    while ((pos = s.find(delimiter)) != std::string::npos) {
-        substrings[index++] = s.substr(0, pos);
-        s.erase(0, pos + delimiter.length());
-    }
-    substrings[index] = s;
-    return substrings;
-}
 
-bool    check(std::string buff)
-{
-    std::string delimiter = " ";
-    int         j = 0;
-    std::map<int, std::string> sub_str = splitString(buff, delimiter);
-
-     for (std::map<int, std::string>::iterator it = sub_str.begin(); it != sub_str.end(); ++it) {
-        j++;
-        std::string sub_str = it->second;
-        for (size_t i = 0; i < sub_str.length(); ++i) {
-            if (!(isdigit(it->second[i]) || it->second[i] == '-' || it->second[i] == '|' || it->second[i] == '.')) {
-                std::cout << RED << errorBadInput << buff << NONE << std::endl;
-                return (false);
-        }
-        }
-     }
-    if (j > 3)
-    {
-        std::cout << RED << errorBadInput << buff << NONE << std::endl;
-        return (false); 
-    }
-    return (true);
-}
 
 void    BitcoinExchange::calcValueBitcoin(){
 
@@ -92,7 +103,7 @@ void    BitcoinExchange::calcValueBitcoin(){
     monFlux.open(_fichierTxt.c_str());
     if (!monFlux)
     {
-        std::cout << RED "Error: error in input file" NONE << std::endl;
+        std::cout << RED errorOpen << "\"" << _fichierTxt << "\"" << NONE << std::endl;
         exit(1);
     }
     getline(monFlux, buffer);
@@ -100,7 +111,7 @@ void    BitcoinExchange::calcValueBitcoin(){
     {
         if (buffer == "")
         {
-            std::cout << RED << error_line << NONE << std::endl;
+            std::cout << RED error_line  NONE << std::endl;
             continue;
         }
         size_t  i = buffer.find("\r"); 
@@ -112,15 +123,15 @@ void    BitcoinExchange::calcValueBitcoin(){
         if (i == std::string::npos)
         {
             if (!testDateValide(buffer))
-                std::cout << RED << errorBadInput << buffer << NONE << std::endl;
+                std::cout << RED errorBadInput << buffer << NONE << std::endl;
             else
-                std::cout << RED <<  errorFormat << NONE << std::endl;
+                std::cout << RED  errorFormat NONE << std::endl;
             continue;
         }
         nbBitcoin = atof(buffer.substr(i + 2).c_str());
         if (nbBitcoin > FLOAT_MAX)
         {
-            std::cout << RED <<  errorTooLargeNumber << NONE << std::endl;
+            std::cout << RED  errorTooLargeNumber NONE << std::endl;
             continue;
         }
         if (nbBitcoin < 0)
@@ -132,7 +143,7 @@ void    BitcoinExchange::calcValueBitcoin(){
             buffer.erase(i - 1);
         else
         {
-            std::cout << RED <<  errorFormat << NONE << std::endl;
+            std::cout << RED errorFormat NONE << std::endl;
             continue;
         }
         if (testDate(buffer))
@@ -146,13 +157,13 @@ void    BitcoinExchange::calcValueBitcoin(){
                     val = _datas[temp];
                 else
                 {
-                    std::cout << RED <<  noValueBefore << buffer << NONE << std::endl;
+                    std::cout << RED  noValueBefore << buffer << NONE << std::endl;
                     continue;
                 }
             }
             else
             {
-                std::cout << RED <<  errorBadInput << buffer << NONE << std::endl;
+                std::cout << RED errorBadInput << buffer << NONE << std::endl;
                 continue;
             }
             

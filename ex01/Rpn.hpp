@@ -37,20 +37,18 @@
 
 class Rpn
 {
-public:
-    Rpn();
-    ~Rpn();
+    public:
+        Rpn();
+        ~Rpn();
 
-    void                        calcPolish(char *argv);
+        void                        calcPolish(char *argv);
 
-private:
-    Rpn(Rpn const &);
+    private:
+        Rpn(Rpn const &);
+        Rpn &operator=(Rpn const &);
+        bool    testAlpha(char alpha) const;
+        void    check_pol(char *pol);
+        bool    testOperation(char alpha) const;
 
-    Rpn &operator=(Rpn const &);
-
-    bool    testAlpha(char alpha) const;
-    void    check_pol(char *pol);
-    bool    testOperation(char alpha) const;
-
-    std::stack<int>   _datas;
+        std::stack<int>   _datas;
 };

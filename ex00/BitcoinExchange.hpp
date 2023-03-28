@@ -38,7 +38,7 @@
 #  define END		"\033[0m"
 
 #  define errorOpen "Error: could not open file."
-#  define errorFormat "Error: error format in the file."
+#  define errorFormat "Error: error format in the file"
 #  define errorBadInput "Error: bad input => "
 #  define errorTooLargeNumber "Error: too large a number."
 #  define errorNegativeNumber "Error: not a positive number."
