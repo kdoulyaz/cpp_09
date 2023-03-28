@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   BitcoinExchange.hpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kdoulyaz <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: kdoulyaz <kdoulyaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 21:14:47 by kdoulyaz          #+#    #+#             */
-/*   Updated: 2023/03/18 21:14:48 by kdoulyaz         ###   ########.fr       */
+/*   Updated: 2023/03/28 17:13:21 by kdoulyaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,8 @@
 #  define UNDER		"\033[4m"
 #  define END		"\033[0m"
 
-#  define errorOpen "Error: could not open file."
-#  define errorFormat "Error: error format in the file"
+#  define errorOpen "Error: could not open file "
+#  define errorFormat "Error: error format in the file "
 #  define errorBadInput "Error: bad input => "
 #  define errorTooLargeNumber "Error: too large a number."
 #  define errorNegativeNumber "Error: not a positive number."
@@ -77,3 +77,6 @@ private:
     size_t          parsing;
     float           nbBitcoin;
 };
+
+std::map<int, std::string> splitString(const std::string& str, const std::string& delimiter);
+bool    check(std::string buff);
