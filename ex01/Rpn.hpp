@@ -52,3 +52,4 @@ class Rpn
 
         std::stack<int>   _datas;
 };
+std::ostream	&operator<<( std::ostream &ostream, const Rpn &myClass );

@@ -42,7 +42,7 @@
 #  define errorBadInput "Error: bad input => "
 #  define errorTooLargeNumber "Error: too large a number."
 #  define errorNegativeNumber "Error: not a positive number."
-#  define error_line "Error: empty line in file"
+#  define error_line "Error: empty line in file "
 #  define noValueBefore "Error: No date before "
 # endif
 
@@ -80,3 +80,4 @@ private:
 
 std::map<int, std::string> splitString(const std::string& str, const std::string& delimiter);
 bool    check(std::string buff);
+std::ostream	&operator<<( std::ostream &ostream, const BitcoinExchange &myClass );

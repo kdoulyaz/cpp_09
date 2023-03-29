@@ -24,8 +24,8 @@ void    Rpn::calcPolish(char *pol) {
     int nb = 0;
     int i = 0;
 
-    std::string error = "\nError";
-    std::string errorByZero = "\nError By Zero";
+    std::string error = "Error";
+    std::string errorByZero = "Error By Zero";
 
     check_pol(pol);
     while (pol[i])
@@ -45,7 +45,6 @@ void    Rpn::calcPolish(char *pol) {
         }
         if (_datas.size() < 2)
             throw error;
-
         result = _datas.top();
         _datas.pop();
         nb = _datas.top();

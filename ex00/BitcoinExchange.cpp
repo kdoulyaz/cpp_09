@@ -20,16 +20,17 @@ void    print_err(std::string err, std::string tmp)
 
 BitcoinExchange::BitcoinExchange(char *fichierTxt) : _fichierTxt(fichierTxt)
 {
+    std::string tmp;
+
     monFlux.open(FICHIER_CSV);
     if (!monFlux)
         print_err(errorOpen, FICHIER_CSV);
     getline(monFlux, buffer);
-    if (buffer[0])
-    {
-        parsing = buffer.rfind("exchange");
-        buffer.erase(parsing);
-        parsingCsv = buffer.substr(4);
-    }
+    if (!buffer[0])
+        print_err(errorFormat, FICHIER_CSV);
+    parsing = buffer.rfind("exchange");
+    buffer.erase(parsing);
+    parsingCsv = buffer.substr(4);
     while (getline(monFlux, buffer))
     {
         if (!check(buffer))
@@ -42,14 +43,17 @@ BitcoinExchange::BitcoinExchange(char *fichierTxt) : _fichierTxt(fichierTxt)
             print_err(errorFormat, FICHIER_CSV);
         val = atof(buffer.substr(i + 1).c_str());
         if (val < 0)
-            throw errorNegativeNumber;
+            print_err(errorNegativeNumber, "");
         if (i)
             buffer.erase(i);
         else
-            throw errorBadInput;
+            print_err(errorBadInput, "");
         _datas.insert(std::pair<std::string, float>(buffer, val));
+        tmp = buffer;
         
     }
+    if (!tmp[0])
+        print_err("Error: empty file ", "data.csv");
     monFlux.close();
 }
 
@@ -76,7 +80,10 @@ bool    check(std::string buff)
     int         j = 0;
 
     if (!buff[0])
-        print_err(errorFormat, FICHIER_CSV);
+    {
+        std::cout << RED error_line << FICHIER_CSV NONE << std::endl;
+        return (false);
+    }
     std::map<int, std::string> sub_str = splitString(buff, delimiter);
 
      for (std::map<int, std::string>::iterator it = sub_str.begin(); it != sub_str.end(); ++it) {

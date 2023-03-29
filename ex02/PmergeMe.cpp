@@ -48,6 +48,9 @@ PmergeMe::PmergeMe(int ac, char **av){
     std::cout << YELLOW "Time to process a range of " CYANE << inputList.size() << YELLOW " elements with std::list container: " GREEN << time2 << " us" << std::endl;
 }
 
+PmergeMe::~PmergeMe(){
+}
+
 template <typename T>
 void PmergeMe::display(const T& container)
 {

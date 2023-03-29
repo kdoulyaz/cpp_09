@@ -40,6 +40,7 @@ class PmergeMe
 {
 public:
 		PmergeMe(int ac, char **av);
+		~PmergeMe();
 		template <typename T>
 		void display(const T& container);
 		void mergeInsertSortDeque(std::deque<int>& arr);
@@ -52,3 +53,4 @@ private:
 
     PmergeMe    &operator=(PmergeMe const &);
 };
+std::ostream	&operator<<( std::ostream &ostream, const PmergeMe &myClass );
