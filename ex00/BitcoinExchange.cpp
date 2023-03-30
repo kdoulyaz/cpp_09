@@ -6,7 +6,7 @@
 /*   By: kdoulyaz <kdoulyaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 21:14:24 by kdoulyaz          #+#    #+#             */
-/*   Updated: 2023/03/28 18:42:08 by kdoulyaz         ###   ########.fr       */
+/*   Updated: 2023/03/30 11:48:55 by kdoulyaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,17 +20,12 @@ void    print_err(std::string err, std::string tmp)
 
 BitcoinExchange::BitcoinExchange(char *fichierTxt) : _fichierTxt(fichierTxt)
 {
-    std::string tmp;
-
     monFlux.open(FICHIER_CSV);
     if (!monFlux)
         print_err(errorOpen, FICHIER_CSV);
     getline(monFlux, buffer);
-    if (!buffer[0])
+    if (!buffer[0] || strcmp(buffer.c_str(), "date,exchange_rate"))
         print_err(errorFormat, FICHIER_CSV);
-    parsing = buffer.rfind("exchange");
-    buffer.erase(parsing);
-    parsingCsv = buffer.substr(4);
     while (getline(monFlux, buffer))
     {
         if (!check(buffer))
@@ -38,7 +33,7 @@ BitcoinExchange::BitcoinExchange(char *fichierTxt) : _fichierTxt(fichierTxt)
         size_t  i = buffer.find("\r");
         if (i != std::string::npos)
             buffer.erase(i);
-        i = buffer.find(parsingCsv.c_str());
+        i = buffer.find(",");
         if (i == std::string::npos)
             print_err(errorFormat, FICHIER_CSV);
         val = atof(buffer.substr(i + 1).c_str());
@@ -49,11 +44,7 @@ BitcoinExchange::BitcoinExchange(char *fichierTxt) : _fichierTxt(fichierTxt)
         else
             print_err(errorBadInput, "");
         _datas.insert(std::pair<std::string, float>(buffer, val));
-        tmp = buffer;
-        
     }
-    if (!tmp[0])
-        print_err("Error: empty file ", "data.csv");
     monFlux.close();
 }
 
@@ -71,7 +62,7 @@ std::map<int, std::string> splitString(const std::string& str, const std::string
         s.erase(0, pos + delimiter.length());
     }
     substrings[index] = s;
-    return substrings;
+    return (substrings);
 }
 
 bool    check(std::string buff)
@@ -115,6 +106,8 @@ void    BitcoinExchange::calcValueBitcoin(){
         exit(1);
     }
     getline(monFlux, buffer);
+    if (!buffer[0] || strcmp(buffer.c_str(), "date | value"))
+        print_err(errorFormat, _fichierTxt);
     while (getline(monFlux, buffer))
     {
         if (buffer == "")

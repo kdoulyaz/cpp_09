@@ -6,7 +6,7 @@
 /*   By: kdoulyaz <kdoulyaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 21:14:47 by kdoulyaz          #+#    #+#             */
-/*   Updated: 2023/03/28 17:13:21 by kdoulyaz         ###   ########.fr       */
+/*   Updated: 2023/03/30 11:46:14 by kdoulyaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,7 @@ private:
     std::ifstream   monFlux;
     std::string     buffer;
     std::string     temp;
-    std::string     parsingCsv;
     float           val;
-    size_t          parsing;
     float           nbBitcoin;
 };
 
